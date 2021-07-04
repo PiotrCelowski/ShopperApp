@@ -1,6 +1,7 @@
 package piotr.celowski.shopperapp.domain.usecases
 
 import android.util.Log
+import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import piotr.celowski.shopperapp.domain.entities.GroceryItem
@@ -9,6 +10,7 @@ import piotr.celowski.shopperapp.domain.interfaces.GroceryItemsDAO
 import piotr.celowski.shopperapp.domain.interfaces.ShoppingListWithGroceryItemsDAO
 import javax.inject.Inject
 
+@ActivityScoped
 class GroceryItemUseCases @Inject constructor(
     private val groceryItemsDAO: GroceryItemsDAO,
     private val shoppingListWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO)
@@ -46,29 +48,17 @@ class GroceryItemUseCases @Inject constructor(
     }
 
     suspend fun removeGroceryItemFromListById(groceryItemId: Int, groceryListId: Int) {
-        val groceryList = findSpecificGroceryList(shoppingListsWithGroceries, groceryListId)
-        val specificGrocery = findSpecificGroceryName(groceryList, groceryItemId)
         try {
-            removeGrocery(specificGrocery, groceryListId)
+            removeGrocery(groceryItemId, groceryListId)
             updateCacheAndNotify()
         } catch (ex: Exception) {
             Log.i("Exception:", ex.toString())
         }
     }
 
-    private suspend fun removeGrocery(specificGrocery: String, shoppingListId: Int) {
+    private suspend fun removeGrocery(specificGroceryId: Int, shoppingListId: Int) {
         withContext(Dispatchers.IO) {
-            groceryItemsDAO.removeGroceryFromParticularList(specificGrocery, shoppingListId)
-        }
-    }
-
-    suspend fun removeGroceryItemFromListByName(groceryItemName: String, groceryListId: Int) {
-        val shoppingList = findSpecificGroceryList(shoppingListsWithGroceries, groceryListId)
-        try {
-            removeGrocery(groceryItemName, groceryListId)
-            updateCacheAndNotify()
-        } catch (ex: Exception) {
-            Log.i("Exception:", ex.toString())
+            groceryItemsDAO.removeGroceryFromParticularList(specificGroceryId, shoppingListId)
         }
     }
 

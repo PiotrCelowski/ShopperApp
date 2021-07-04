@@ -27,14 +27,19 @@ class ShoppingListsFragment : Fragment() {
 
     @Inject
     lateinit var shoppingListsDao: ShoppingListsDAO
+
     @Inject
     lateinit var shoppingListsWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO
+
     @Inject
     lateinit var shoppingListDb: ShoppingListsDatabase
+
     @Inject
     lateinit var groceryItemsDAO: GroceryItemsDAO
+
     @Inject
     lateinit var shoppingListsController: ShoppingListsController
+
     @Inject
     lateinit var shoppingListUseCases: ShoppingListUseCases
 
@@ -56,48 +61,24 @@ class ShoppingListsFragment : Fragment() {
 
         val recyclerFragment = inflater.inflate(R.layout.fragment_shopping_lists, container, false)
 
-        bb()
 
         mShoppingListRecycler = mFragmentShoppingListsBinding.shoppingListRecyclerView
         mShoppingListRecycler.layoutManager = LinearLayoutManager(context)
-        mShoppingListRecycler.adapter = ShoppingListsAdapter(shoppingListsWithGroceryItemsDAO, shoppingListUseCases)
+        mShoppingListRecycler.adapter =
+            ShoppingListsAdapter(shoppingListsWithGroceryItemsDAO, shoppingListUseCases)
 
-        mFragmentShoppingListsBinding.floatingActionButton.setOnClickListener {
+        mFragmentShoppingListsBinding.addListFloatingButton.setOnClickListener {
             shoppingListsController.createNewShoppingList("Shopping List")
         }
 
+        shoppingListsController.updateCacheWithDatabase()
+
         return mFragmentShoppingListsBinding.root
-        }
-
-    fun aa() = runBlocking {
-        launch {
-            val shoppingListUseCases = ShoppingListUseCases(shoppingListsDao, shoppingListsWithGroceryItemsDAO)
-            shoppingListUseCases.createShoppingListAndSaveToDb("SybiX")
-            shoppingListUseCases.createShoppingListAndSaveToDb("Pietrek")
-
-            val groceryItemUseCases = GroceryItemUseCases(groceryItemsDAO, shoppingListsWithGroceryItemsDAO)
-            groceryItemUseCases.createGroceryItemAndAddToList("Ziemniaki", 2)
-            groceryItemUseCases.createGroceryItemAndAddToList("Marchewka", 1)
-            groceryItemUseCases.createGroceryItemAndAddToList("Czeresnie", 2)
-            groceryItemUseCases.createGroceryItemAndAddToList("Chleb", 1)
-            groceryItemUseCases.createGroceryItemAndAddToList("Papier toaletowy", 2)
-            groceryItemUseCases.createGroceryItemAndAddToList("Salami", 1)
-            groceryItemUseCases.createGroceryItemAndAddToList("Gnoje", 1)
-
-        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Log.i("onDestroy", "fragment onDestroy executed")
-        bb()
-    }
-
-    fun bb() = runBlocking {
-        launch {
-            shoppingListsWithGroceryItemsDAO.cleanGroceriesListTable()
-            shoppingListsWithGroceryItemsDAO.cleanShoppingListTable()
-        }
     }
 
 }

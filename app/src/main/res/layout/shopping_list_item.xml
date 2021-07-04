@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shoppingListItem"
     android:layout_width="match_parent"
     android:layout_height="96dp"
@@ -18,24 +19,41 @@
         app:srcCompat="@drawable/baseline_local_grocery_store_black_48" />
 
     <LinearLayout
-        android:id="@+id/listTextSide"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_height="match_parent"
         android:layout_weight="3"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/listName"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/listTextSide"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/listName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/archiveButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_weight="1"
+            app:srcCompat="@drawable/archive_scaled" />
+
     </LinearLayout>
 
 </LinearLayout>

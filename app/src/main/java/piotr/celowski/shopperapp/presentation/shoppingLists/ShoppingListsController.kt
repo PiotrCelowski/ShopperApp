@@ -14,4 +14,12 @@ class ShoppingListsController @Inject constructor(val shoppingListUseCases: Shop
             }
         }
     }
+
+    fun updateCacheWithDatabase() {
+        runBlocking {
+            launch {
+                shoppingListUseCases.updateCacheAndNotify()
+            }
+        }
+    }
 }

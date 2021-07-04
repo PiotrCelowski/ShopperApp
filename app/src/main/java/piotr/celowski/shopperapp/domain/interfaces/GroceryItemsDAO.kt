@@ -10,6 +10,6 @@ interface GroceryItemsDAO {
     @Insert
     fun insert(groceryItem: GroceryItem)
 
-    @Query("DELETE FROM groceries_list WHERE grocery_item_name = :groceryName AND shopping_list_creator_id = :shoppingListId")
-    fun removeGroceryFromParticularList(groceryName: String, shoppingListId: Int)
+    @Query("DELETE FROM groceries_list WHERE grocery_item_id = :groceryId AND shopping_list_creator_id = :shoppingListId")
+    fun removeGroceryFromParticularList(groceryId: Int, shoppingListId: Int)
 }
