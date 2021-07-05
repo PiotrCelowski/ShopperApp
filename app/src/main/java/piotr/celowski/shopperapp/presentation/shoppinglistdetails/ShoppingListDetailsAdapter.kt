@@ -17,7 +17,6 @@ import piotr.celowski.shopperapp.domain.usecases.GroceryItemUseCases
 class ShoppingListDetailsAdapter(
         private val shoppingListId: Int,
         private val archivedStatus: Boolean,
-        private val shoppingListWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO,
         private val groceryItemUseCases: GroceryItemUseCases,
         private val shoppingListDetailsController: ShoppingListDetailsController
 )
