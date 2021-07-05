@@ -7,15 +7,18 @@ import piotr.celowski.shopperapp.domain.common.BaseObservable
 import piotr.celowski.shopperapp.domain.entities.ShoppingListWithGroceryItems
 import piotr.celowski.shopperapp.domain.interfaces.ShoppingListWithGroceryItemsDAO
 
-open class CommonUseCase(private val shoppingListWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO): BaseObservable<CommonUseCase.Listener>() {
+open class CommonUseCase(private val shoppingListWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO) :
+    BaseObservable<CommonUseCase.Listener>() {
     lateinit var activeShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
     lateinit var archivedShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
     lateinit var allShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
 
     interface Listener {
-        fun onCacheUpdated(activeShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
-                           archivedShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
-                           allShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>)
+        fun onCacheUpdated(
+            activeShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
+            archivedShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
+            allShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
+        )
     }
 
     init {
@@ -32,7 +35,11 @@ open class CommonUseCase(private val shoppingListWithGroceryItemsDAO: ShoppingLi
         allShoppingListsWithGroceries = runBlocking {
             fetchAllShoppingListsWithGroceries()
         }
-        notifyListeners(activeShoppingListsWithGroceries, archivedShoppingListsWithGroceries, allShoppingListsWithGroceries)
+        notifyListeners(
+            activeShoppingListsWithGroceries,
+            archivedShoppingListsWithGroceries,
+            allShoppingListsWithGroceries
+        )
     }
 
     private suspend fun fetchActiveShoppingListsWithGroceries(): List<ShoppingListWithGroceryItems> {
@@ -53,11 +60,17 @@ open class CommonUseCase(private val shoppingListWithGroceryItemsDAO: ShoppingLi
         }
     }
 
-    private fun notifyListeners(activeShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
-                                archivedShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
-                                allShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>) {
-        for(listener in getListeners()) {
-            listener.onCacheUpdated(activeShoppingListsWithGroceries, archivedShoppingListsWithGroceries, allShoppingListsWithGroceries)
+    private fun notifyListeners(
+        activeShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
+        archivedShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
+        allShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
+    ) {
+        for (listener in getListeners()) {
+            listener.onCacheUpdated(
+                activeShoppingListsWithGroceries,
+                archivedShoppingListsWithGroceries,
+                allShoppingListsWithGroceries
+            )
         }
     }
 

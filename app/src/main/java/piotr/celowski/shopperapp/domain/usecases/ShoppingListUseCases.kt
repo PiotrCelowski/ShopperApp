@@ -19,12 +19,9 @@ class ShoppingListUseCases @Inject constructor(
     : CommonUseCase(shoppingListWithGroceryItemsDAO) {
 
     suspend fun createShoppingListAndSaveToDb(shoppingListName: String) {
-        //generateId
-        val newId = findHighestShoppingListId(allShoppingListsWithGroceries) + 1
-        //generate date
+        val generatedId = findHighestShoppingListId(allShoppingListsWithGroceries) + 1
         val currentDate = Timestamp(System.currentTimeMillis())
-
-        val generatedShoppingList = ShoppingList(newId, shoppingListName, currentDate.toString(), false)
+        val generatedShoppingList = ShoppingList(generatedId, shoppingListName, currentDate.toString(), false)
 
         try {
             writeToDb(generatedShoppingList)

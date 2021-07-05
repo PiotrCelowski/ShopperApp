@@ -13,27 +13,28 @@ import javax.inject.Inject
 @ActivityScoped
 class GroceryItemUseCases @Inject constructor(
     private val groceryItemsDAO: GroceryItemsDAO,
-    private val shoppingListWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO)
-    : CommonUseCase(shoppingListWithGroceryItemsDAO) {
+    private val shoppingListWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO
+) : CommonUseCase(shoppingListWithGroceryItemsDAO) {
 
     suspend fun createGroceryItemAndAddToList(groceryItemName: String, groceryListId: Int) {
-        //generate id
-        var generatedId = 0
-        val allGroceries = findAllGroceries(allShoppingListsWithGroceries)
-
-        if(allGroceries?.isEmpty() || allGroceries == null) {
-            generatedId = 1
-        } else {
-            generatedId = findHighestGroceryIdInList(allGroceries) + 1
-        }
-
+        val generatedId = generateId()
         val createdGrocery = GroceryItem(generatedId, groceryItemName, groceryListId)
 
         try {
             insertGroceryToDb(createdGrocery)
             updateCacheAndNotify()
-        } catch(ex: Exception) {
+        } catch (ex: Exception) {
             Log.i("Exception: ", ex.toString())
+        }
+    }
+
+    private fun generateId(): Int {
+        val allGroceries = findAllGroceries(allShoppingListsWithGroceries)
+
+        if (allGroceries?.isEmpty() || allGroceries == null) {
+            return 1
+        } else {
+            return findHighestGroceryIdInList(allGroceries) + 1
         }
     }
 
@@ -62,11 +63,14 @@ class GroceryItemUseCases @Inject constructor(
         }
     }
 
-    private fun findSpecificGroceryName(groceryList: List<GroceryItem>?, groceryItemId: Int): String {
+    private fun findSpecificGroceryName(
+        groceryList: List<GroceryItem>?,
+        groceryItemId: Int
+    ): String {
         lateinit var groceryItemName: String
         if (groceryList != null) {
             for (grocery in groceryList) {
-                if(grocery.groceryItemId == groceryItemId) {
+                if (grocery.groceryItemId == groceryItemId) {
                     groceryItemName = grocery.groceryItemName
                 }
             }
@@ -74,10 +78,14 @@ class GroceryItemUseCases @Inject constructor(
         return groceryItemName
     }
 
-    private fun findGroceryIdByNameFromList(shoppingListWithGroceryItems: ShoppingListWithGroceryItems?, groceryName: String, shoppingListId: Int): Int {
-        if(shoppingListWithGroceryItems != null) {
+    private fun findGroceryIdByNameFromList(
+        shoppingListWithGroceryItems: ShoppingListWithGroceryItems?,
+        groceryName: String,
+        shoppingListId: Int
+    ): Int {
+        if (shoppingListWithGroceryItems != null) {
             for (grocery in shoppingListWithGroceryItems!!.groceries) {
-                if(grocery.groceryItemName == groceryName) {
+                if (grocery.groceryItemName == groceryName) {
                     return grocery.groceryItemId
                 }
             }
@@ -91,9 +99,12 @@ class GroceryItemUseCases @Inject constructor(
         }
     }
 
-    private fun findSpecificGroceryList(shoppingListsWithGroceryItems: List<ShoppingListWithGroceryItems>, providedShoppingListId: Int): List<GroceryItem>? {
-        for(list in shoppingListsWithGroceryItems) {
-            if(list.shoppingList.shoppingListId == providedShoppingListId && list.groceries.isNotEmpty()) {
+    private fun findSpecificGroceryList(
+        shoppingListsWithGroceryItems: List<ShoppingListWithGroceryItems>,
+        providedShoppingListId: Int
+    ): List<GroceryItem>? {
+        for (list in shoppingListsWithGroceryItems) {
+            if (list.shoppingList.shoppingListId == providedShoppingListId && list.groceries.isNotEmpty()) {
                 return list.groceries
             }
         }
@@ -102,8 +113,8 @@ class GroceryItemUseCases @Inject constructor(
 
     private fun findHighestGroceryIdInList(groceryList: List<GroceryItem>): Int {
         var highestId = 1
-        for(grocery in groceryList) {
-            if(grocery.groceryItemId > highestId) {
+        for (grocery in groceryList) {
+            if (grocery.groceryItemId > highestId) {
                 highestId = grocery.groceryItemId
             }
         }
