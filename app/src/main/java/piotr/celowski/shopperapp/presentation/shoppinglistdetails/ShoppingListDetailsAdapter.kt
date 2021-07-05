@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import piotr.celowski.shopperapp.R
 import piotr.celowski.shopperapp.domain.entities.GroceryItem
 import piotr.celowski.shopperapp.domain.entities.ShoppingListWithGroceryItems
-import piotr.celowski.shopperapp.domain.interfaces.ShoppingListWithGroceryItemsDAO
 import piotr.celowski.shopperapp.domain.usecases.CommonUseCase
 import piotr.celowski.shopperapp.domain.usecases.GroceryItemUseCases
 
@@ -19,8 +18,8 @@ class ShoppingListDetailsAdapter(
         private val archivedStatus: Boolean,
         private val groceryItemUseCases: GroceryItemUseCases,
         private val shoppingListDetailsController: ShoppingListDetailsController
-)
-    : RecyclerView.Adapter<ShoppingListDetailsAdapter.ShoppingListsViewHolder>(), CommonUseCase.Listener {
+) : RecyclerView.Adapter<ShoppingListDetailsItemView.ShoppingListsViewHolder>(), CommonUseCase.Listener {
+    private lateinit var shoppingListDetailsItemView: ShoppingListDetailsItemView
 
     private var listOfGroceryItems: List<String> = listOf<String>()
         set(value) {
@@ -38,35 +37,28 @@ class ShoppingListDetailsAdapter(
         groceryItemUseCases.registerListener(this)
     }
 
-    class ShoppingListsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val groceryName: TextView
-        val removeButton: ImageView
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ShoppingListDetailsItemView.ShoppingListsViewHolder {
+        shoppingListDetailsItemView = ShoppingListDetailsItemView(viewGroup)
+        val view = shoppingListDetailsItemView.inflateHolder()
 
-        init {
-            groceryName = view.findViewById(R.id.groceryName)
-            removeButton = view.findViewById(R.id.removeButton)
-        }
+        return ShoppingListDetailsItemView.ShoppingListsViewHolder(view)
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ShoppingListsViewHolder {
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.grocery_item, viewGroup, false)
-
-        return ShoppingListsViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ShoppingListsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ShoppingListDetailsItemView.ShoppingListsViewHolder, position: Int) {
         val singleGroceryName = listOfGroceryItems[position]
         val singleGroceryId = listOfGroceryItemIds[position]
 
         holder.groceryName.text = singleGroceryName
 
-        if(archivedStatus) {
-            holder.removeButton.isVisible = false
-        }
-
-        holder.removeButton.setOnClickListener {
-            shoppingListDetailsController.removeGroceryItemFromList(singleGroceryId, shoppingListId)
+        if (archivedStatus) {
+            shoppingListDetailsItemView.removeButton(holder)
+        } else {
+            shoppingListDetailsItemView.setOnClickListeners(
+                holder,
+                shoppingListDetailsController,
+                singleGroceryId,
+                shoppingListId
+            )
         }
     }
 
@@ -96,7 +88,7 @@ class ShoppingListDetailsAdapter(
         listOfGroceryItemIds = listOfGroceryItemsIdstemp
     }
 
-    fun addGroceryNamesToList(groceryItems: List<GroceryItem>): MutableList<String> {
+    private fun addGroceryNamesToList(groceryItems: List<GroceryItem>): MutableList<String> {
         val listOfGroceryNames = mutableListOf<String>()
         for(grocery in groceryItems) {
             listOfGroceryNames.add(grocery.groceryItemName)
@@ -104,7 +96,7 @@ class ShoppingListDetailsAdapter(
         return listOfGroceryNames
     }
 
-    fun addGroceryIdsToList(groceryItems: List<GroceryItem>): MutableList<Int> {
+    private fun addGroceryIdsToList(groceryItems: List<GroceryItem>): MutableList<Int> {
         val listOfGroceryIds = mutableListOf<Int>()
         for(grocery in groceryItems) {
             listOfGroceryIds.add(grocery.groceryItemId)

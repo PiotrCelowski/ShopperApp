@@ -1,4 +1,4 @@
-package piotr.celowski.shopperapp.presentation.shoppingLists
+package piotr.celowski.shopperapp.presentation.shoppinglists
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

@@ -1,4 +1,4 @@
-package piotr.celowski.shopperapp.presentation.shoppingLists.activeshoppinglists
+package piotr.celowski.shopperapp.presentation.shoppinglists.activeshoppinglists
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import piotr.celowski.shopperapp.R
 import piotr.celowski.shopperapp.databinding.FragmentActiveShoppingListsBinding
 import piotr.celowski.shopperapp.domain.usecases.ShoppingListUseCases
-import piotr.celowski.shopperapp.presentation.shoppingLists.ShoppingListsController
+import piotr.celowski.shopperapp.presentation.shoppinglists.ShoppingListsController
 
 class ActiveShoppingListsView(
     private val layoutInflater: LayoutInflater,

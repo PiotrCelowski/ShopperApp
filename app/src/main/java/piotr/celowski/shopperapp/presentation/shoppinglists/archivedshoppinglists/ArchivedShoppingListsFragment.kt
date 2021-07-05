@@ -1,4 +1,4 @@
-package piotr.celowski.shopperapp.presentation.shoppingLists.archivedshoppinglists
+package piotr.celowski.shopperapp.presentation.shoppinglists.archivedshoppinglists
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
 import piotr.celowski.shopperapp.domain.usecases.ShoppingListUseCases
-import piotr.celowski.shopperapp.presentation.shoppingLists.ShoppingListsController
+import piotr.celowski.shopperapp.presentation.shoppinglists.ShoppingListsController
 import javax.inject.Inject
 
 @AndroidEntryPoint

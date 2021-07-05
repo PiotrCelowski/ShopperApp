@@ -1,4 +1,4 @@
-package piotr.celowski.shopperapp.presentation.shoppingLists.archivedshoppinglists
+package piotr.celowski.shopperapp.presentation.shoppinglists.archivedshoppinglists
 
 import android.content.Context
 import android.view.LayoutInflater

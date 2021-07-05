@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/shoppingListsFragment"
-        android:name="piotr.celowski.shopperapp.presentation.shoppingLists.activeshoppinglists.ActiveShoppingListsFragment"
+        android:name="piotr.celowski.shopperapp.presentation.shoppinglists.activeshoppinglists.ActiveShoppingListsFragment"
         android:label="ShoppingListsFragment">
         <action
             android:id="@+id/action_shoppingListsFragment_to_shoppingListDetailsFragment"
@@ -20,7 +20,7 @@
         android:label="shoppingListDetailsFragment" />
     <fragment
         android:id="@+id/archivedShoppingListsFragment"
-        android:name="piotr.celowski.shopperapp.presentation.shoppingLists.archivedshoppinglists.ArchivedShoppingListsFragment"
+        android:name="piotr.celowski.shopperapp.presentation.shoppinglists.archivedshoppinglists.ArchivedShoppingListsFragment"
         android:label="ArchivedShoppingListsFragment" >
         <action
             android:id="@+id/action_archivedShoppingListsFragment_to_shoppingListDetailsFragment"

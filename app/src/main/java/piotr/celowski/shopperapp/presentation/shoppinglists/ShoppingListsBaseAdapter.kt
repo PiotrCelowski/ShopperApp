@@ -1,11 +1,11 @@
-package piotr.celowski.shopperapp.presentation.shoppingLists
+package piotr.celowski.shopperapp.presentation.shoppinglists
 
 import androidx.recyclerview.widget.RecyclerView
 import piotr.celowski.shopperapp.domain.entities.ShoppingListWithGroceryItems
 import piotr.celowski.shopperapp.domain.usecases.CommonUseCase
 import piotr.celowski.shopperapp.domain.usecases.ShoppingListUseCases
 
-open abstract class ShoppingListsAdapter<VIEW_HOLDER : RecyclerView.ViewHolder?>(
+open abstract class ShoppingListsBaseAdapter<VIEW_HOLDER : RecyclerView.ViewHolder?>(
         private val shoppingListUseCases: ShoppingListUseCases)
     : RecyclerView.Adapter<VIEW_HOLDER>(), CommonUseCase.Listener {
 

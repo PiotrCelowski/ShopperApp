@@ -1,46 +1,28 @@
-package piotr.celowski.shopperapp.presentation.shoppingLists.archivedshoppinglists
+package piotr.celowski.shopperapp.presentation.shoppinglists.archivedshoppinglists
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.navigation.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import piotr.celowski.shopperapp.R
 import piotr.celowski.shopperapp.domain.entities.ShoppingListWithGroceryItems
-import piotr.celowski.shopperapp.domain.usecases.CommonUseCase
 import piotr.celowski.shopperapp.domain.usecases.ShoppingListUseCases
-import piotr.celowski.shopperapp.presentation.shoppingLists.ShoppingListsAdapter
+import piotr.celowski.shopperapp.presentation.shoppinglists.ShoppingListsBaseAdapter
 
 class ArchivedShoppingListsAdapter(
     private val shoppingListUseCases: ShoppingListUseCases
-) : ShoppingListsAdapter<ArchivedShoppingListsAdapter.ArchivedShoppingListsViewHolder>(shoppingListUseCases) {
+) : ShoppingListsBaseAdapter<ArchivedShoppingListsItemView.ArchivedShoppingListsViewHolder>(shoppingListUseCases) {
 
-    class ArchivedShoppingListsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView
-        val date: TextView
-        val item: View
-
-        init {
-            title = view.findViewById(R.id.listName)
-            date = view.findViewById(R.id.date)
-            item = view
-        }
-    }
+    private lateinit var archivedShoppingListsItemView: ArchivedShoppingListsItemView
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ArchivedShoppingListsViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.archived_shopping_list_item, parent, false)
-
-        return ArchivedShoppingListsViewHolder(view)
+    ): ArchivedShoppingListsItemView.ArchivedShoppingListsViewHolder {
+        archivedShoppingListsItemView = ArchivedShoppingListsItemView(parent)
+        val view = archivedShoppingListsItemView.inflateHolder()
+        return ArchivedShoppingListsItemView.ArchivedShoppingListsViewHolder(view)
     }
 
     override fun onBindViewHolder(
-        holder: ArchivedShoppingListsViewHolder,
+        holder: ArchivedShoppingListsItemView.ArchivedShoppingListsViewHolder,
         position: Int
     ) {
         val singleShoppingList = listOfShoppingLists[position]
@@ -55,9 +37,7 @@ class ArchivedShoppingListsAdapter(
         bundle!!.putInt("shoppingListId", singleShoppingListId)
         bundle!!.putBoolean("shoppingListArchived", singleShoppingListArchived)
 
-        holder.item.setOnClickListener {
-            holder.item.findNavController().navigate(R.id.action_archivedShoppingListsFragment_to_shoppingListDetailsFragment, bundle)
-        }
+        archivedShoppingListsItemView.setOnClickListeners(holder, bundle)
     }
 
     override fun getItemCount(): Int {
