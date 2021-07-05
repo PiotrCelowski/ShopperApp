@@ -9,8 +9,13 @@ import piotr.celowski.shopperapp.domain.entities.ShoppingListWithGroceryItems
 interface ShoppingListWithGroceryItemsDAO {
 
     @Transaction
+    @Query("SELECT * FROM shopping_list_table WHERE shopping_list_archived = :shoppingListArchived")
+    suspend fun getShoppingListsWithGroceries(shoppingListArchived: Boolean): List<ShoppingListWithGroceryItems>
+
+    @Transaction
     @Query("SELECT * FROM shopping_list_table")
-    suspend fun getShoppingListsWithGroceries(): List<ShoppingListWithGroceryItems>
+    suspend fun getAllShoppingListsWithGroceries(): List<ShoppingListWithGroceryItems>
+
 
     @Transaction
     @Query("DELETE FROM shopping_list_table WHERE shopping_list_id = :shoppingListId")

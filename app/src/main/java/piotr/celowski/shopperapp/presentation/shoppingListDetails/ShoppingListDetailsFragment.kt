@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ class ShoppingListDetailsFragment: Fragment() {
     private lateinit var mFragmentShoppingListDetailsBinding: FragmentShoppingListDetailsBinding
     private lateinit var mShoppingListDetailsRecycler: RecyclerView
     private var shoppingListId: Int = 0
+    private var shoppingListArchivedStatus: Boolean = false
 
     @Inject
     lateinit var shoppingListsWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO
@@ -43,15 +45,23 @@ class ShoppingListDetailsFragment: Fragment() {
         )
 
         shoppingListId = arguments?.getInt("shoppingListId")!!
+        shoppingListArchivedStatus = arguments?.getBoolean("shoppingListArchived")!!
 
         val recyclerFragment = inflater.inflate(R.layout.fragment_shopping_list_details, container, false)
 
         mShoppingListDetailsRecycler = mFragmentShoppingListDetailsBinding.shoppingListDetailsRecyclerView
         mShoppingListDetailsRecycler.layoutManager = LinearLayoutManager(context)
-        mShoppingListDetailsRecycler.adapter = ShoppingListDetailsAdapter(shoppingListId, shoppingListsWithGroceryItemsDAO, grocerItemUseCases, shoppingListDetailsController)
+        mShoppingListDetailsRecycler.adapter = ShoppingListDetailsAdapter(shoppingListId, shoppingListArchivedStatus, shoppingListsWithGroceryItemsDAO, grocerItemUseCases, shoppingListDetailsController)
 
-        mFragmentShoppingListDetailsBinding.addGroceryItemFloatingButton.setOnClickListener {
-            shoppingListDetailsController.createNewGroceryItemForList("GroceryItem", shoppingListId)
+        if(shoppingListArchivedStatus) {
+            mFragmentShoppingListDetailsBinding.addGroceryItemFloatingButton.isVisible = false
+        } else {
+            mFragmentShoppingListDetailsBinding.addGroceryItemFloatingButton.setOnClickListener {
+                shoppingListDetailsController.createNewGroceryItemForList(
+                    "GroceryItem",
+                    shoppingListId
+                )
+            }
         }
 
         shoppingListDetailsController.updateCacheWithDatabase()

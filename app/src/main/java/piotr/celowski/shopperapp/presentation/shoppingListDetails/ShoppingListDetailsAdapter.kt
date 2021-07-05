@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import piotr.celowski.shopperapp.R
 import piotr.celowski.shopperapp.domain.entities.GroceryItem
@@ -16,6 +17,7 @@ import piotr.celowski.shopperapp.domain.usecases.GroceryItemUseCases
 
 class ShoppingListDetailsAdapter(
         private val shoppingListId: Int,
+        private val archivedStatus: Boolean,
         private val shoppingListWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO,
         private val groceryItemUseCases: GroceryItemUseCases,
         private val shoppingListDetailsController: ShoppingListDetailsController
@@ -61,6 +63,10 @@ class ShoppingListDetailsAdapter(
 
         holder.groceryName.text = singleGroceryName
 
+        if(archivedStatus) {
+            holder.removeButton.isVisible = false
+        }
+
         holder.removeButton.setOnClickListener {
             shoppingListDetailsController.removeGroceryItemFromList(singleGroceryId, shoppingListId)
         }
@@ -70,11 +76,15 @@ class ShoppingListDetailsAdapter(
         return listOfGroceryItems.size
     }
 
-    override fun onCacheUpdated(shoppingListsWithGroceries: List<ShoppingListWithGroceryItems>) {
-         getGroceryNamesForSpecificList(shoppingListsWithGroceries, shoppingListId)
+    override fun onCacheUpdated(
+        activeShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
+        archivedShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
+        allShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
+    ) {
+        getGroceryNamesForSpecificList(allShoppingListsWithGroceries, shoppingListId)
     }
 
-    fun getGroceryNamesForSpecificList(shoppingListsWithGroceries: List<ShoppingListWithGroceryItems>, shoppingListId: Int) {
+    private fun getGroceryNamesForSpecificList(shoppingListsWithGroceries: List<ShoppingListWithGroceryItems>, shoppingListId: Int) {
         lateinit var listOfGroceryItemsNames: List<String>
         lateinit var listOfGroceryItemsIdstemp: List<Int>
 

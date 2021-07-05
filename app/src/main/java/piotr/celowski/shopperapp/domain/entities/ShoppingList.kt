@@ -8,5 +8,6 @@ import androidx.room.PrimaryKey
 data class ShoppingList(
     @PrimaryKey @ColumnInfo(name = "shopping_list_id") val shoppingListId: Int,
     @ColumnInfo(name = "shopping_list_name") val shoppingListName: String,
-    @ColumnInfo(name = "date") val date: String
+    @ColumnInfo(name = "shopping_list_date") val shoppingListDate: String,
+    @ColumnInfo(name = "shopping_list_archived") var shoppingListArchived: Boolean
 )

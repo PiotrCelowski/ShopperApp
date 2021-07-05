@@ -8,10 +8,14 @@ import piotr.celowski.shopperapp.domain.entities.ShoppingListWithGroceryItems
 import piotr.celowski.shopperapp.domain.interfaces.ShoppingListWithGroceryItemsDAO
 
 open class CommonUseCase(private val shoppingListWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO): BaseObservable<CommonUseCase.Listener>() {
-    lateinit var shoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
+    lateinit var activeShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
+    lateinit var archivedShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
+    lateinit var allShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
 
     interface Listener {
-        fun onCacheUpdated(shoppingListsWithGroceries: List<ShoppingListWithGroceryItems>)
+        fun onCacheUpdated(activeShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
+                           archivedShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
+                           allShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>)
     }
 
     init {
@@ -19,21 +23,41 @@ open class CommonUseCase(private val shoppingListWithGroceryItemsDAO: ShoppingLi
     }
 
     fun updateCacheAndNotify() {
-        shoppingListsWithGroceries = runBlocking {
-            fetchShoppingListsWithGroceries()
+        activeShoppingListsWithGroceries = runBlocking {
+            fetchActiveShoppingListsWithGroceries()
         }
-        notifyListeners(shoppingListsWithGroceries)
+        archivedShoppingListsWithGroceries = runBlocking {
+            fetchArchivedShoppingListsWithGroceries()
+        }
+        allShoppingListsWithGroceries = runBlocking {
+            fetchAllShoppingListsWithGroceries()
+        }
+        notifyListeners(activeShoppingListsWithGroceries, archivedShoppingListsWithGroceries, allShoppingListsWithGroceries)
     }
 
-    private suspend fun fetchShoppingListsWithGroceries(): List<ShoppingListWithGroceryItems> {
+    private suspend fun fetchActiveShoppingListsWithGroceries(): List<ShoppingListWithGroceryItems> {
         return withContext(Dispatchers.IO) {
-            shoppingListWithGroceryItemsDAO.getShoppingListsWithGroceries()
+            shoppingListWithGroceryItemsDAO.getShoppingListsWithGroceries(false)
         }
     }
 
-    private fun notifyListeners(shoppingListsWithGroceries: List<ShoppingListWithGroceryItems>) {
+    private suspend fun fetchArchivedShoppingListsWithGroceries(): List<ShoppingListWithGroceryItems> {
+        return withContext(Dispatchers.IO) {
+            shoppingListWithGroceryItemsDAO.getShoppingListsWithGroceries(true)
+        }
+    }
+
+    private suspend fun fetchAllShoppingListsWithGroceries(): List<ShoppingListWithGroceryItems> {
+        return withContext(Dispatchers.IO) {
+            shoppingListWithGroceryItemsDAO.getAllShoppingListsWithGroceries()
+        }
+    }
+
+    private fun notifyListeners(activeShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
+                                archivedShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>,
+                                allShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>) {
         for(listener in getListeners()) {
-            listener.onCacheUpdated(shoppingListsWithGroceries)
+            listener.onCacheUpdated(activeShoppingListsWithGroceries, archivedShoppingListsWithGroceries, allShoppingListsWithGroceries)
         }
     }
 

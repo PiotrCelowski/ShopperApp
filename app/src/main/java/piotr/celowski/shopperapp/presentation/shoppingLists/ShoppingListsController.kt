@@ -22,4 +22,12 @@ class ShoppingListsController @Inject constructor(val shoppingListUseCases: Shop
             }
         }
     }
+
+    fun archiveShoppingList(shoppingListId: Int) {
+        runBlocking {
+            launch {
+                shoppingListUseCases.archiveShoppingList(shoppingListId)
+            }
+        }
+    }
 }

@@ -65,7 +65,7 @@ class ShoppingListsFragment : Fragment() {
         mShoppingListRecycler = mFragmentShoppingListsBinding.shoppingListRecyclerView
         mShoppingListRecycler.layoutManager = LinearLayoutManager(context)
         mShoppingListRecycler.adapter =
-            ShoppingListsAdapter(shoppingListsWithGroceryItemsDAO, shoppingListUseCases)
+            ShoppingListsAdapter(shoppingListsWithGroceryItemsDAO, shoppingListUseCases, shoppingListsController)
 
         mFragmentShoppingListsBinding.addListFloatingButton.setOnClickListener {
             shoppingListsController.createNewShoppingList("Shopping List")

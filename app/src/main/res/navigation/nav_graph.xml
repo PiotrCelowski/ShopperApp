@@ -18,4 +18,12 @@
         android:id="@+id/shoppingListDetailsFragment"
         android:name="piotr.celowski.shopperapp.presentation.shoppingListDetails.ShoppingListDetailsFragment"
         android:label="shoppingListDetailsFragment" />
+    <fragment
+        android:id="@+id/archivedShoppingListsFragment"
+        android:name="piotr.celowski.shopperapp.presentation.archivedShoppingLists.ArchivedShoppingListsFragment"
+        android:label="ArchivedShoppingListsFragment" >
+        <action
+            android:id="@+id/action_archivedShoppingListsFragment_to_shoppingListDetailsFragment"
+            app:destination="@id/shoppingListDetailsFragment" />
+    </fragment>
 </navigation>

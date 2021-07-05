@@ -4,7 +4,6 @@ import android.util.Log
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import piotr.celowski.shopperapp.domain.common.BaseObservable
 import piotr.celowski.shopperapp.domain.entities.ShoppingList
 import piotr.celowski.shopperapp.domain.entities.ShoppingListWithGroceryItems
 import piotr.celowski.shopperapp.domain.interfaces.ShoppingListWithGroceryItemsDAO
@@ -21,11 +20,11 @@ class ShoppingListUseCases @Inject constructor(
 
     suspend fun createShoppingListAndSaveToDb(shoppingListName: String) {
         //generateId
-        val newId = findHighestShoppingListId(shoppingListsWithGroceries) + 1
+        val newId = findHighestShoppingListId(allShoppingListsWithGroceries) + 1
         //generate date
         val currentDate = Timestamp(System.currentTimeMillis())
 
-        val generatedShoppingList = ShoppingList(newId, shoppingListName, currentDate.toString())
+        val generatedShoppingList = ShoppingList(newId, shoppingListName, currentDate.toString(), false)
 
         try {
             writeToDb(generatedShoppingList)
@@ -44,6 +43,21 @@ class ShoppingListUseCases @Inject constructor(
         }
     }
 
+    suspend fun archiveShoppingList(shoppingListId: Int) {
+        try {
+            changeArchiveStatusInDb(shoppingListId)
+            updateCacheAndNotify()
+        } catch (ex: Exception) {
+            Log.i("Exception: ", ex.toString())
+        }
+    }
+
+    private suspend fun changeArchiveStatusInDb(shoppingListId: Int) {
+        withContext(Dispatchers.IO) {
+            shoppingListDAO.archiveShoppingList(true, shoppingListId)
+        }
+    }
+
     suspend fun removeGroceryItemsForParticularList(shoppingListId: Int) {
         withContext(Dispatchers.IO) {
             shoppingListWithGroceryItemsDAO.removeGroceriesForParticularList(shoppingListId)
@@ -51,7 +65,7 @@ class ShoppingListUseCases @Inject constructor(
     }
 
     suspend fun removeGroceryItemsForParticularList(shoppingListName: String): Boolean {
-        val shoppingListId = findShoppingListIdByName(shoppingListsWithGroceries, shoppingListName)
+        val shoppingListId = findShoppingListIdByName(activeShoppingListsWithGroceries, shoppingListName)
         if (shoppingListId != null) {
             withContext(Dispatchers.IO) {
                 shoppingListWithGroceryItemsDAO.removeGroceriesForParticularList(shoppingListId)
@@ -69,7 +83,7 @@ class ShoppingListUseCases @Inject constructor(
     }
 
     private suspend fun removeFromDb(shoppingListName: String) {
-        val shoppingListId = findShoppingListIdByName(shoppingListsWithGroceries, shoppingListName)
+        val shoppingListId = findShoppingListIdByName(activeShoppingListsWithGroceries, shoppingListName)
         withContext(Dispatchers.IO) {
             shoppingListWithGroceryItemsDAO.removeShoppingList(shoppingListId!!)
         }

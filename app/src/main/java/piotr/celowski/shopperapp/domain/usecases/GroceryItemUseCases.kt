@@ -19,7 +19,7 @@ class GroceryItemUseCases @Inject constructor(
     suspend fun createGroceryItemAndAddToList(groceryItemName: String, groceryListId: Int) {
         //generate id
         var generatedId = 0
-        val allGroceries = findAllGroceries(shoppingListsWithGroceries)
+        val allGroceries = findAllGroceries(allShoppingListsWithGroceries)
 
         if(allGroceries?.isEmpty() || allGroceries == null) {
             generatedId = 1
