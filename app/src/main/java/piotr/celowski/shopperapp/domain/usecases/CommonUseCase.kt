@@ -26,15 +26,16 @@ open class CommonUseCase(private val shoppingListWithGroceryItemsDAO: ShoppingLi
     }
 
     fun updateCacheAndNotify() {
-        activeShoppingListsWithGroceries = runBlocking {
+        activeShoppingListsWithGroceries = (runBlocking {
             fetchActiveShoppingListsWithGroceries()
-        }
-        archivedShoppingListsWithGroceries = runBlocking {
+        })
+        archivedShoppingListsWithGroceries = (runBlocking {
             fetchArchivedShoppingListsWithGroceries()
-        }
-        allShoppingListsWithGroceries = runBlocking {
+        })
+
+        allShoppingListsWithGroceries = (runBlocking {
             fetchAllShoppingListsWithGroceries()
-        }
+        })
         notifyListeners(
             activeShoppingListsWithGroceries,
             archivedShoppingListsWithGroceries,
@@ -73,5 +74,4 @@ open class CommonUseCase(private val shoppingListWithGroceryItemsDAO: ShoppingLi
             )
         }
     }
-
 }

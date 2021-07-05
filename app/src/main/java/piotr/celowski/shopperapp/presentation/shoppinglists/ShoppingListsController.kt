@@ -8,9 +8,10 @@ import javax.inject.Inject
 class ShoppingListsController @Inject constructor(val shoppingListUseCases: ShoppingListUseCases) {
 
     fun createNewShoppingList(shoppingListName: String) {
+        val createdList = shoppingListUseCases.createShoppingList(shoppingListName)
         runBlocking {
             launch {
-                shoppingListUseCases.createShoppingListAndSaveToDb(shoppingListName)
+                shoppingListUseCases.saveListToDb(createdList)
             }
         }
     }

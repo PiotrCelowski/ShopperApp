@@ -16,10 +16,12 @@ class GroceryItemUseCases @Inject constructor(
     private val shoppingListWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO
 ) : CommonUseCase(shoppingListWithGroceryItemsDAO) {
 
-    suspend fun createGroceryItemAndAddToList(groceryItemName: String, groceryListId: Int) {
+    fun createGroceryItem(groceryItemName: String, groceryListId: Int): GroceryItem {
         val generatedId = generateId()
-        val createdGrocery = GroceryItem(generatedId, groceryItemName, groceryListId)
+        return GroceryItem(generatedId, groceryItemName, groceryListId)
+    }
 
+    suspend fun saveGroceryItemToDb(createdGrocery: GroceryItem) {
         try {
             insertGroceryToDb(createdGrocery)
             updateCacheAndNotify()
@@ -97,18 +99,6 @@ class GroceryItemUseCases @Inject constructor(
         withContext(Dispatchers.IO) {
             groceryItemsDAO.insert(groceryItem)
         }
-    }
-
-    private fun findSpecificGroceryList(
-        shoppingListsWithGroceryItems: List<ShoppingListWithGroceryItems>,
-        providedShoppingListId: Int
-    ): List<GroceryItem>? {
-        for (list in shoppingListsWithGroceryItems) {
-            if (list.shoppingList.shoppingListId == providedShoppingListId && list.groceries.isNotEmpty()) {
-                return list.groceries
-            }
-        }
-        return null
     }
 
     private fun findHighestGroceryIdInList(groceryList: List<GroceryItem>): Int {

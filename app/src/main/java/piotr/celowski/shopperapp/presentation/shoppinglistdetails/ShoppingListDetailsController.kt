@@ -8,9 +8,10 @@ import javax.inject.Inject
 class ShoppingListDetailsController @Inject constructor(val groceryItemUseCases: GroceryItemUseCases) {
 
     fun createNewGroceryItemForList(groceryItemName: String, groceryListId: Int) {
+        val createdItem = groceryItemUseCases.createGroceryItem(groceryItemName, groceryListId)
         runBlocking {
             launch {
-                groceryItemUseCases.createGroceryItemAndAddToList(groceryItemName, groceryListId)
+                groceryItemUseCases.saveGroceryItemToDb(createdItem)
             }
         }
     }

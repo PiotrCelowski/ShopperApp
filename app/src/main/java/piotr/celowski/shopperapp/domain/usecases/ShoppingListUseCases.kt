@@ -18,24 +18,17 @@ class ShoppingListUseCases @Inject constructor(
     private val shoppingListWithGroceryItemsDAO: ShoppingListWithGroceryItemsDAO)
     : CommonUseCase(shoppingListWithGroceryItemsDAO) {
 
-    suspend fun createShoppingListAndSaveToDb(shoppingListName: String) {
+    fun createShoppingList(shoppingListName: String): ShoppingList {
         val generatedId = findHighestShoppingListId(allShoppingListsWithGroceries) + 1
         val currentDate = Timestamp(System.currentTimeMillis())
-        val generatedShoppingList = ShoppingList(generatedId, shoppingListName, currentDate.toString(), false)
+        return ShoppingList(generatedId, shoppingListName, currentDate.toString(), false)
+    }
 
+    suspend fun saveListToDb(generatedShoppingList: ShoppingList) {
         try {
             writeToDb(generatedShoppingList)
             updateCacheAndNotify()
         } catch(ex: Exception) {
-            Log.i("Exception: ", ex.toString())
-        }
-    }
-
-    suspend fun removeShoppingList(shoppingListName: String) {
-        try {
-            removeFromDb(shoppingListName)
-            updateCacheAndNotify()
-        } catch (ex: Exception) {
             Log.i("Exception: ", ex.toString())
         }
     }
@@ -55,34 +48,9 @@ class ShoppingListUseCases @Inject constructor(
         }
     }
 
-    suspend fun removeGroceryItemsForParticularList(shoppingListId: Int) {
-        withContext(Dispatchers.IO) {
-            shoppingListWithGroceryItemsDAO.removeGroceriesForParticularList(shoppingListId)
-        }
-    }
-
-    suspend fun removeGroceryItemsForParticularList(shoppingListName: String): Boolean {
-        val shoppingListId = findShoppingListIdByName(activeShoppingListsWithGroceries, shoppingListName)
-        if (shoppingListId != null) {
-            withContext(Dispatchers.IO) {
-                shoppingListWithGroceryItemsDAO.removeGroceriesForParticularList(shoppingListId)
-            }
-            return true
-        } else {
-            return false
-        }
-    }
-
     private suspend fun writeToDb(shoppingList: ShoppingList) {
         withContext(Dispatchers.IO) {
             shoppingListDAO.insert(shoppingList)
-        }
-    }
-
-    private suspend fun removeFromDb(shoppingListName: String) {
-        val shoppingListId = findShoppingListIdByName(activeShoppingListsWithGroceries, shoppingListName)
-        withContext(Dispatchers.IO) {
-            shoppingListWithGroceryItemsDAO.removeShoppingList(shoppingListId!!)
         }
     }
 
@@ -100,15 +68,6 @@ class ShoppingListUseCases @Inject constructor(
         for(list in shoppingListsWithGroceryItems) {
             if(list.shoppingList.shoppingListName == providedShoppingListName) {
                 return list.shoppingList.shoppingListId
-            }
-        }
-        return null
-    }
-
-    private fun findShoppingListNameById(shoppingListsWithGroceryItems: List<ShoppingListWithGroceryItems>, providedShoppingListId: Int): String? {
-        for(list in shoppingListsWithGroceryItems) {
-            if(list.shoppingList.shoppingListId == providedShoppingListId) {
-                return list.shoppingList.shoppingListName
             }
         }
         return null
