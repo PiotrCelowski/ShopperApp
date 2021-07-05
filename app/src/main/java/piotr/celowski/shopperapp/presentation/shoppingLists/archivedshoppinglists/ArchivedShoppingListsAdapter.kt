@@ -1,4 +1,4 @@
-package piotr.celowski.shopperapp.presentation.archivedShoppingLists
+package piotr.celowski.shopperapp.presentation.shoppingLists.archivedshoppinglists
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,34 +11,11 @@ import piotr.celowski.shopperapp.R
 import piotr.celowski.shopperapp.domain.entities.ShoppingListWithGroceryItems
 import piotr.celowski.shopperapp.domain.usecases.CommonUseCase
 import piotr.celowski.shopperapp.domain.usecases.ShoppingListUseCases
+import piotr.celowski.shopperapp.presentation.shoppingLists.ShoppingListsAdapter
 
 class ArchivedShoppingListsAdapter(
     private val shoppingListUseCases: ShoppingListUseCases
-) : RecyclerView.Adapter<ArchivedShoppingListsAdapter.ArchivedShoppingListsViewHolder>(), CommonUseCase.Listener {
-    private var listOfShoppingLists: List<String> = listOf<String>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-    private var listOfShoppingListsDates: List<String> = listOf<String>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-    private var listOfShoppingListsIds: List<Int> = listOf<Int>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-    private var listOfShoppingListsArchivedStatus: List<Boolean> = listOf<Boolean>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    init {
-        shoppingListUseCases.registerListener(this)
-    }
+) : ShoppingListsAdapter<ArchivedShoppingListsAdapter.ArchivedShoppingListsViewHolder>(shoppingListUseCases) {
 
     class ArchivedShoppingListsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView
@@ -93,23 +70,5 @@ class ArchivedShoppingListsAdapter(
         allShoppingListsWithGroceries: List<ShoppingListWithGroceryItems>
     ) {
         getShoppingListNames(archivedShoppingListsWithGroceries)
-    }
-
-    private fun getShoppingListNames(shoppingListsWithGroceries: List<ShoppingListWithGroceryItems>) {
-        val listOfNames = mutableListOf<String>()
-        val listOfDates = mutableListOf<String>()
-        val listOfIds = mutableListOf<Int>()
-        val listOfArchivedStatus = mutableListOf<Boolean>()
-
-        for(list in shoppingListsWithGroceries) {
-            listOfNames.add(list.shoppingList.shoppingListName)
-            listOfDates.add(list.shoppingList.shoppingListDate)
-            listOfIds.add(list.shoppingList.shoppingListId)
-            listOfArchivedStatus.add(list.shoppingList.shoppingListArchived)
-        }
-        listOfShoppingLists = listOfNames
-        listOfShoppingListsDates = listOfDates
-        listOfShoppingListsIds = listOfIds
-        listOfShoppingListsArchivedStatus = listOfArchivedStatus
     }
 }

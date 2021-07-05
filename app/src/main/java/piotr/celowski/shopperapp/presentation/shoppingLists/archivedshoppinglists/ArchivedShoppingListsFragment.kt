@@ -1,4 +1,4 @@
-package piotr.celowski.shopperapp.presentation.archivedShoppingLists
+package piotr.celowski.shopperapp.presentation.shoppingLists.archivedshoppinglists
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,9 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import piotr.celowski.shopperapp.R
 import piotr.celowski.shopperapp.databinding.FragmentArchivedShoppingListsBinding
-import piotr.celowski.shopperapp.databinding.FragmentShoppingListsBinding
 import piotr.celowski.shopperapp.domain.usecases.ShoppingListUseCases
-import piotr.celowski.shopperapp.presentation.shoppingLists.ShoppingListsAdapter
 import piotr.celowski.shopperapp.presentation.shoppingLists.ShoppingListsController
 import javax.inject.Inject
 
@@ -37,7 +35,7 @@ class ArchivedShoppingListsFragment : Fragment() {
             false
         )
 
-        val recyclerFragment = inflater.inflate(R.layout.fragment_shopping_lists, container, false)
+        val recyclerFragment = inflater.inflate(R.layout.fragment_active_shopping_lists, container, false)
 
         mShoppingListRecycler = mFragmentArchivedShoppingListsBinding.archivedShoppingListRecyclerView
         mShoppingListRecycler.layoutManager = LinearLayoutManager(context)

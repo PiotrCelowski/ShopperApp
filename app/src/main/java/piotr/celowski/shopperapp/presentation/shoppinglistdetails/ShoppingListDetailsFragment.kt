@@ -1,4 +1,4 @@
-package piotr.celowski.shopperapp.presentation.shoppingListDetails
+package piotr.celowski.shopperapp.presentation.shoppinglistdetails
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,8 +13,6 @@ import piotr.celowski.shopperapp.R
 import piotr.celowski.shopperapp.databinding.FragmentShoppingListDetailsBinding
 import piotr.celowski.shopperapp.domain.interfaces.ShoppingListWithGroceryItemsDAO
 import piotr.celowski.shopperapp.domain.usecases.GroceryItemUseCases
-import piotr.celowski.shopperapp.domain.usecases.ShoppingListUseCases
-import piotr.celowski.shopperapp.presentation.shoppingLists.ShoppingListsController
 import javax.inject.Inject
 
 @AndroidEntryPoint

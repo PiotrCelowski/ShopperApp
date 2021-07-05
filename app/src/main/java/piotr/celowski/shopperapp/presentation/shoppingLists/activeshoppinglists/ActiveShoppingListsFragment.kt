@@ -1,4 +1,4 @@
-package piotr.celowski.shopperapp.presentation.shoppingLists
+package piotr.celowski.shopperapp.presentation.shoppingLists.activeshoppinglists
 
 import android.os.Bundle
 import android.util.Log
@@ -9,20 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
 import piotr.celowski.shopperapp.R
 import piotr.celowski.shopperapp.domain.interfaces.ShoppingListsDAO
 import piotr.celowski.shopperapp.application.databases.ShoppingListsDatabase
-import piotr.celowski.shopperapp.databinding.FragmentShoppingListsBinding
+import piotr.celowski.shopperapp.databinding.FragmentActiveShoppingListsBinding
 import piotr.celowski.shopperapp.domain.interfaces.GroceryItemsDAO
 import piotr.celowski.shopperapp.domain.interfaces.ShoppingListWithGroceryItemsDAO
-import piotr.celowski.shopperapp.domain.usecases.GroceryItemUseCases
 import piotr.celowski.shopperapp.domain.usecases.ShoppingListUseCases
+import piotr.celowski.shopperapp.presentation.shoppingLists.ShoppingListsController
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ShoppingListsFragment : Fragment() {
-    private lateinit var mFragmentShoppingListsBinding: FragmentShoppingListsBinding
+class ActiveShoppingListsFragment : Fragment() {
+    private lateinit var mFragmentShoppingListsBinding: FragmentActiveShoppingListsBinding
     private lateinit var mShoppingListRecycler: RecyclerView
 
     @Inject
@@ -53,19 +52,19 @@ class ShoppingListsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mFragmentShoppingListsBinding = FragmentShoppingListsBinding.inflate(
+        mFragmentShoppingListsBinding = FragmentActiveShoppingListsBinding.inflate(
             layoutInflater,
             container,
             false
         )
 
-        val recyclerFragment = inflater.inflate(R.layout.fragment_shopping_lists, container, false)
+        val recyclerFragment = inflater.inflate(R.layout.fragment_active_shopping_lists, container, false)
 
 
         mShoppingListRecycler = mFragmentShoppingListsBinding.shoppingListRecyclerView
         mShoppingListRecycler.layoutManager = LinearLayoutManager(context)
         mShoppingListRecycler.adapter =
-            ShoppingListsAdapter(shoppingListsWithGroceryItemsDAO, shoppingListUseCases, shoppingListsController)
+            ActiveShoppingListsAdapter(shoppingListUseCases, shoppingListsController)
 
         mFragmentShoppingListsBinding.addListFloatingButton.setOnClickListener {
             shoppingListsController.createNewShoppingList("Shopping List")
