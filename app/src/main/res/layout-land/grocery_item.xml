@@ -11,6 +11,7 @@
         android:layout_height="48dp"
         android:layout_gravity="center"
         android:layout_weight="1"
+        android:contentDescription="@string/shopping_basket_pic"
         app:srcCompat="@drawable/baseline_shopping_basket_black_48" />
 
     <LinearLayout
@@ -35,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_weight="1"
+            android:contentDescription="@string/grocery_remove_button"
             app:srcCompat="@drawable/baseline_highlight_off_black_48" />
 
     </LinearLayout>

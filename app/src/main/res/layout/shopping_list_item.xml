@@ -16,6 +16,7 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:adjustViewBounds="false"
+        android:contentDescription="@string/cart_pic"
         app:srcCompat="@drawable/baseline_local_grocery_store_black_48" />
 
     <LinearLayout
@@ -52,6 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:contentDescription="@string/archival_button"
             app:srcCompat="@drawable/archive_scaled" />
 
     </LinearLayout>

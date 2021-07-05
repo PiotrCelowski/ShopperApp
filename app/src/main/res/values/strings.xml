@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">ShopperApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cart_pic">shopping cart picture</string>
+    <string name="add_grocery_button">add grocery item button</string>
+    <string name="shopping_basket_pic">shopping basket</string>
+    <string name="grocery_remove_button">grocery remove button</string>
+    <string name="archival_button">archival button</string>
+    <string name="list_add_button">list add button</string>
 </resources>

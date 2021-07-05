@@ -20,6 +20,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginBottom="32dp"
             android:clickable="true"
+            android:contentDescription="@string/add_grocery_button"
             app:backgroundTint="#1AD121"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
