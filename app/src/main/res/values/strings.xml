@@ -7,4 +7,5 @@
     <string name="grocery_remove_button">grocery remove button</string>
     <string name="archival_button">archival button</string>
     <string name="list_add_button">list add button</string>
+    <string name="text_input_default">Input text here</string>
 </resources>

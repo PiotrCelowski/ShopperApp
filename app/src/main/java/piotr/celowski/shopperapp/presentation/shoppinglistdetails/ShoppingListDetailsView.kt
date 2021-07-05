@@ -43,6 +43,7 @@ class ShoppingListDetailsView(
     fun setupOnClickListeners() {
         if(shoppingListArchivedStatus) {
             mFragmentShoppingListDetailsBinding.addGroceryItemFloatingButton.isVisible = false
+            mFragmentShoppingListDetailsBinding.textInput.isVisible = false
         } else {
             configureAddGroceryItemButton()
         }
@@ -50,14 +51,38 @@ class ShoppingListDetailsView(
 
     private fun configureAddGroceryItemButton() {
         mFragmentShoppingListDetailsBinding.addGroceryItemFloatingButton.setOnClickListener {
+            val groceryName: String
+            val inputTextExists = checkIfInputTextExists(getInputText())
+            groceryName = setInputText(inputTextExists)
             shoppingListDetailsController.createNewGroceryItemForList(
-                "GroceryItem",
+                groceryName,
                 shoppingListId
             )
+            clearInputText()
         }
     }
 
     fun getRootView(): View {
         return mFragmentShoppingListDetailsBinding.root
+    }
+
+    private fun getInputText(): String {
+        return mFragmentShoppingListDetailsBinding.textInput.text.toString()
+    }
+
+    private fun checkIfInputTextExists(inputText: String): Boolean {
+        return inputText.isNotEmpty()
+    }
+
+    private fun setInputText(inputTextExists: Boolean): String {
+        if(inputTextExists) {
+            return getInputText()
+        } else {
+            return "GroceryItem"
+        }
+    }
+
+    private fun clearInputText() {
+        mFragmentShoppingListDetailsBinding.textInput.text.clear()
     }
 }
